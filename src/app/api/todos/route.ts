@@ -18,7 +18,7 @@ export async function GET(request: Request) {
     }
 
 
-    const todos = await prisma.todo.findMany({ take, skip, orderBy: { createdAt: 'desc' } })
+    const todos = await prisma.todo.findMany({ take, skip, orderBy: { updatedAt: 'desc' } })
 
     return NextResponse.json(todos);
 }
