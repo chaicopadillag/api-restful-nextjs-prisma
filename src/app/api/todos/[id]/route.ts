@@ -1,4 +1,5 @@
 import prisma from '@/lib/prisma';
+import { getAuthUser } from '@/server-actions';
 import { todoSchemaUpdate } from '@/validations';
 import { NextResponse } from 'next/server';
 
@@ -8,16 +9,23 @@ type SegmentsType = {
     }
 }
 
-const findTodoExist = async (id: string) => {
-    const todo = await prisma.todo.findFirst({ where: { id } })
+const findTodoExist = async (id: string, userId: string) => {
+
+    const todo = await prisma.todo.findFirst({ where: { id, userId } })
     return todo;
 }
 
 
 export async function GET(request: Request, { params }: SegmentsType) {
+    const authUser = await getAuthUser();
+
+    if (!authUser) {
+        return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
+    }
 
 
-    const todo = await findTodoExist(params.id)
+
+    const todo = await findTodoExist(params.id, authUser.id)
 
     if (!todo) {
         return NextResponse.json({
@@ -34,7 +42,12 @@ export async function GET(request: Request, { params }: SegmentsType) {
 export async function PUT(req: Request, { params }: SegmentsType) {
 
     try {
-        const existTodo = await findTodoExist(params.id)
+        const authUser = await getAuthUser();
+        if (!authUser) {
+            return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
+        }
+
+        const existTodo = await findTodoExist(params.id, authUser.id)
 
         if (!existTodo) {
             return NextResponse.json({

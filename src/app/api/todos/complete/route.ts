@@ -1,11 +1,17 @@
 import prisma from "@/lib/prisma";
+import { getAuthUser } from "@/server-actions";
 import { NextResponse } from "next/server";
 
 export async function DELETE(req: Request) {
 
-    try {
 
-        await prisma.todo.deleteMany({ where: { complete: true } })
+    try {
+        const authUser = await getAuthUser();
+        if (!authUser) {
+            return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
+        }
+
+        await prisma.todo.deleteMany({ where: { complete: true, userId: authUser.id } })
 
         return NextResponse.json({ message: 'Delete todos completed' }, { status: 200 });
     } catch (error: any) {
