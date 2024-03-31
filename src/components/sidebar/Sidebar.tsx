@@ -1,7 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { CiBookmarkCheck, CiLogout } from 'react-icons/ci';
-import { HiOutlineServer } from 'react-icons/hi';
+import { FaCartPlus, FaCookie, FaProductHunt } from 'react-icons/fa';
+import { HiOutlineServer, HiShoppingBag } from 'react-icons/hi';
 import { MdOutlineDashboard } from 'react-icons/md';
 import { SidebarItem, SidebarItemType } from './SidebarItem';
 
@@ -20,7 +21,17 @@ const menuItems: SidebarItemType[] = [
         title: 'Server Actions',
         path: '/dashboard/server-actions',
         icon: <HiOutlineServer size={30} />,
-    }
+    },
+    {
+        title: 'Cookies',
+        path: '/dashboard/cookies',
+        icon: <FaCookie size={30} />,
+    },
+    {
+        title: 'Productos',
+        path: '/dashboard/products',
+        icon: <HiShoppingBag size={30} />,
+    },
 ];
 
 export const Sidebar = () => {
